@@ -4,64 +4,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
     <meta name="theme-color" content="#121212">
+
     <title>{% block title %}The Chinese Hub{% endblock %}</title>
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Django Static CSS -->
+    <link
+        rel="stylesheet"
+        href="{% static 'shop/css/style.css' %}"
+    >
 </head>
+
 <body class="{% if cart_item_count > 0 and show_sticky_cart %}has-sticky-cart{% endif %}">
+
+    <!-- HEADER -->
     <header class="nx-header">
         <div class="nx-container nx-header-inner">
+
             <a href="{% url 'home' %}" class="nx-logo">
-                <img src="{% static 'shop/img/logo.png' %}" alt="{{ shop_name }} logo" class="nx-logo-mark">
-                <span class="nx-logo-text">The Chinese Hub</span>
+
+                <!-- Django Static Logo -->
+                <img
+                    src="{% static 'shop/img/logo.png' %}"
+                    alt="{{ shop_name }} logo"
+                    class="nx-logo-mark"
+                >
+
+                <span class="nx-logo-text">
+                    The Chinese Hub
+                </span>
+
             </a>
-            <a href="{% url 'view_cart' %}" class="nx-cart-link" aria-label="View cart">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 6h15l-1.5 9h-12L6 6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                    <path d="M6 6 5 3H2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                    <circle cx="9.5" cy="19.5" r="1.5" fill="currentColor"/>
-                    <circle cx="17.5" cy="19.5" r="1.5" fill="currentColor"/>
+
+            <!-- CART -->
+            <a
+                href="{% url 'view_cart' %}"
+                class="nx-cart-link"
+                aria-label="View cart"
+            >
+
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M6 6h15l-1.5 9h-12L6 6Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linejoin="round"
+                    />
+
+                    <path
+                        d="M6 6 5 3H2"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+
+                    <circle
+                        cx="9.5"
+                        cy="19.5"
+                        r="1.5"
+                        fill="currentColor"
+                    />
+
+                    <circle
+                        cx="17.5"
+                        cy="19.5"
+                        r="1.5"
+                        fill="currentColor"
+                    />
                 </svg>
-                {% if cart_item_count > 0 %}<span class="nx-cart-badge">{{ cart_item_count }}</span>{% endif %}
+
+                {% if cart_item_count > 0 %}
+                    <span class="nx-cart-badge">
+                        {{ cart_item_count }}
+                    </span>
+                {% endif %}
+
             </a>
+
         </div>
     </header>
 
+
+    <!-- MESSAGES -->
     {% if messages %}
-    <div class="nx-container nx-messages">
-        {% for message in messages %}
-            <div class="nx-flash nx-flash-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    </div>
+        <div class="nx-container nx-messages">
+
+            {% for message in messages %}
+
+                <div class="nx-flash nx-flash-{{ message.tags }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </div>
     {% endif %}
 
+
+    <!-- MAIN CONTENT -->
     <main class="nx-container nx-main">
-        {% block content %}{% endblock %}
+
+        {% block content %}
+        {% endblock %}
+
     </main>
 
+
+    <!-- FOOTER -->
     <footer class="nx-footer">
+
         <div class="nx-container nx-footer-inner">
-            <span>&copy; {% now "Y" %} {{ shop_name }} &mdash; Fresh wok, fast order.</span>
-            <span class="nx-footer-contact">
-                {{ owner_name }} &middot; <a href="tel:{{ owner_phone_tel }}">{{ owner_phone_display }}</a>
+
+            <span>
+                &copy; {% now "Y" %}
+                {{ shop_name }}
+                &mdash;
+                Fresh wok, fast order.
             </span>
+
+            <span class="nx-footer-contact">
+
+                {{ owner_name }}
+                &middot;
+
+                <a href="tel:{{ owner_phone_tel }}">
+                    {{ owner_phone_display }}
+                </a>
+
+            </span>
+
         </div>
+
     </footer>
 
-    <a href="tel:{{ owner_phone_tel }}" class="nx-call-fab" aria-label="Call {{ shop_name }}">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6.6 10.8c1.2 2.4 3.2 4.4 5.6 5.6l1.9-1.9c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V19.5c0 .6-.4 1-1 1C10.6 20.5 3.5 13.4 3.5 4.9c0-.6.4-1 1-1H8c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1L6.6 10.8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+
+    <!-- CALL BUTTON -->
+    <a
+        href="tel:{{ owner_phone_tel }}"
+        class="nx-call-fab"
+        aria-label="Call {{ shop_name }}"
+    >
+
+        <svg
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+
+            <path
+                d="M6.6 10.8c1.2 2.4 3.2 4.4 5.6 5.6l1.9-1.9c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V19.5c0 .6-.4 1-1 1C10.6 20.5 3.5 13.4 3.5 4.9c0-.6.4-1 1-1H8c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1L6.6 10.8Z"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linejoin="round"
+            />
+
         </svg>
+
     </a>
 
+
+    <!-- STICKY CART -->
     {% if cart_item_count > 0 and show_sticky_cart %}
-    <a href="{% url 'view_cart' %}" class="nx-sticky-cart">
-        <span class="nx-sticky-cart-dot">{{ cart_item_count }}</span>
-        <span class="nx-sticky-cart-label">View Cart</span>
-        <span class="nx-sticky-cart-total">₹{{ cart_total_price }}</span>
-    </a>
+
+        <a
+            href="{% url 'view_cart' %}"
+            class="nx-sticky-cart"
+        >
+
+            <span class="nx-sticky-cart-dot">
+                {{ cart_item_count }}
+            </span>
+
+            <span class="nx-sticky-cart-label">
+                View Cart
+            </span>
+
+            <span class="nx-sticky-cart-total">
+                ₹{{ cart_total_price }}
+            </span>
+
+        </a>
+
     {% endif %}
+
 </body>
 </html>
