@@ -3,7 +3,7 @@
 A Django website for a Chinese-food shop:
 - Menu with categories, **Half / Full pricing**, and food photos
 - **Add to Cart** (session-based, no login required)
-- **₹40 service charge** automatically added to every bill
+- **₹00 service charge** automatically added to every bill
 - Checkout → creates an **Order** and generates a real **PDF bill**
 - **Owner contact card** on the homepage + floating **Call** button
 - Order-success page has a **"Send Bill (PDF) via WhatsApp"** button that
@@ -37,7 +37,7 @@ OWNER_NAME = "Owner Name"
 OWNER_PHONE_DISPLAY = "+91 99999 99999"
 OWNER_PHONE_TEL = "+919999999999"
 OWNER_WHATSAPP_NUMBER = "919999999999"
-SERVICE_CHARGE = Decimal("40.00")
+SERVICE_CHARGE = Decimal("00.00")
 ```
 
 ## Sending the PDF bill via WhatsApp
