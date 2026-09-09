@@ -19,7 +19,7 @@ class FoodItem(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='items')
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=255, blank=True)
-    image = models.ImageField(upload_to='food_items/', blank=True, null=True)
+    image = models.ImageField(upload_to="food_items/", blank=True, null=True)
 
     # Some items are single-price only (e.g. a drink) so half price is optional.
     half_price = models.DecimalField(
