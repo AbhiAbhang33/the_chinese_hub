@@ -20,41 +20,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # IMPORTANT:
 # Set DJANGO_SECRET_KEY in Vercel Environment Variables.
-SECRET_KEY = "527tk!pm_s%zms7d+!n&5(2s276czp11=d+visin5hb7un9e3s"
-
+SECRET_KEY = "django-insecure-527tk!pm_s%zms7d+!n&5(2s276czp11=d+visin5hb7un9e3s"
+SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-secret-key')
 
 # =============================================================================
 # DEBUG
 # =============================================================================
 
-DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+DEBUG = False
 
-# Temporary debugging option for Vercel.
-# After deployment is working, you can remove this or set it to False.
-DEBUG_PROPAGATE_EXCEPTIONS = True
-
-
-# =============================================================================
-# ALLOWED HOSTS
-# =============================================================================
-
-ALLOWED_HOSTS = [
-    "thechinesehub.vercel.app",
-    ".vercel.app",
-    "localhost",
-    "127.0.0.1",
-]
-
-
-# =============================================================================
-# CSRF
-# =============================================================================
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://thechinesehub.vercel.app",
-    "https://*.vercel.app",
-]
-
+ALLOWED_HOSTS = ['*', '.vercel.app']
 
 # =============================================================================
 # APPLICATIONS
