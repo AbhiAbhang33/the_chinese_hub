@@ -1,38 +1,51 @@
-{% extends 'shop/base.html' %}
+{% extends "shop/base.html" %}
 
-{% block title %}Order Placed — The Chinese Hub{% endblock %}
+
+{% block title %}
+    Order Ready — The Chinese Hub
+{% endblock %}
+
 
 {% block content %}
 
 <div class="nx-success">
 
-    <!-- ============================= -->
-    <!-- SUCCESS ICON -->
-    <!-- ============================= -->
 
-    <div class="nx-success-icon">
+    <!-- =========================================================
+         SUCCESS ICON
+    ========================================================== -->
+
+    <div
+        class="nx-success-icon"
+        aria-hidden="true"
+    >
         ✓
     </div>
 
 
-    <!-- ============================= -->
-    <!-- PAGE TITLE -->
-    <!-- ============================= -->
+    <!-- =========================================================
+         PAGE TITLE
+    ========================================================== -->
 
     <h1 class="nx-page-title">
-        To Place Order!
+        Order Ready!
     </h1>
 
 
     <p>
-        Thanks, {{ order.customer_name }}!
-        To Place The Order Send It To the Whatsup.
+        Thank you, {{ order.customer_name }}! ❤️
+    </p>
+
+    <p>
+        Your order has been prepared.
+        Send the order details to The Chinese Hub on WhatsApp
+        to place the order.
     </p>
 
 
-    <!-- ============================= -->
-    <!-- WHATSAPP BUTTON -->
-    <!-- ============================= -->
+    <!-- =========================================================
+         WHATSAPP BUTTON
+    ========================================================== -->
 
     <div class="nx-success-actions">
 
@@ -40,8 +53,7 @@
             type="button"
             id="nx-send-whatsapp-btn"
             class="nx-btn nx-btn-whatsapp nx-btn-lg"
-
-            data-phone="{{ order.phone_number }}"
+            data-phone="{{ owner_whatsapp_number }}"
             data-order-id="{{ order.id }}"
             data-customer-name="{{ order.customer_name }}"
         >
@@ -51,62 +63,65 @@
     </div>
 
 
-    <!-- ============================= -->
-    <!-- BILL / ORDER SUMMARY -->
-    <!-- ============================= -->
+    <!-- =========================================================
+         BILL / ORDER SUMMARY
+    ========================================================== -->
 
     <div class="nx-bill">
+
 
         <h2>
             Your Order
         </h2>
 
 
-        <!-- ============================= -->
-        <!-- ORDER ITEMS -->
-        <!-- ============================= -->
+        <!-- =====================================================
+             ORDER ITEMS
+        ====================================================== -->
 
         <ul class="nx-summary-list">
 
             {% for item in order.items.all %}
 
-            <li>
+                <li>
 
-                <span>
+                    <span>
 
-                    {{ item.item_name }}
+                        {{ item.item_name }}
 
-                    {% if item.get_size_display %}
-                        ({{ item.get_size_display }})
-                    {% endif %}
+                        {% if item.get_size_display %}
+                            ({{ item.get_size_display }})
+                        {% endif %}
 
-                    x{{ item.quantity }}
+                        ×{{ item.quantity }}
 
-                </span>
+                    </span>
 
 
-                <span>
-                    ₹{{ item.subtotal }}
-                </span>
+                    <span>
+                        ₹{{ item.subtotal }}
+                    </span>
 
-            </li>
+                </li>
 
             {% empty %}
 
-            <li>
-                <span>
-                    No items found.
-                </span>
-            </li>
+                <li>
+
+                    <span>
+                        No items found.
+                    </span>
+
+                </li>
 
             {% endfor %}
 
         </ul>
 
 
-        <!-- ============================= -->
-        <!-- ITEMS SUBTOTAL -->
-        <!-- ============================= -->
+        <!-- =====================================================
+             ITEMS SUBTOTAL
+        ====================================================== -->
 
         <div class="nx-summary-total nx-summary-line">
 
@@ -121,9 +136,9 @@
         </div>
 
 
-        <!-- ============================= -->
-        <!-- SERVICE CHARGE -->
-        <!-- ============================= -->
+        <!-- =====================================================
+             SERVICE CHARGE
+        ====================================================== -->
 
         <div class="nx-summary-total nx-summary-line">
 
@@ -138,9 +153,9 @@
         </div>
 
 
-        <!-- ============================= -->
-        <!-- TOTAL -->
-        <!-- ============================= -->
+        <!-- =====================================================
+             TOTAL
+        ====================================================== -->
 
         <div class="nx-summary-total">
 
@@ -155,9 +170,9 @@
         </div>
 
 
-        <!-- ============================= -->
-        <!-- ORDER INFORMATION -->
-        <!-- ============================= -->
+        <!-- =====================================================
+             ORDER INFORMATION
+        ====================================================== -->
 
         <p class="nx-bill-meta">
 
@@ -168,7 +183,7 @@
             {{ order.get_order_type_display }}
 
 
-            {% if order.order_type == 'DELIVERY' %}
+            {% if order.order_type == "DELIVERY" %}
 
                 <br>
 
@@ -189,14 +204,23 @@
 
             {{ order.phone_number }}
 
+
+            <br>
+
+            <strong>
+                Order ID:
+            </strong>
+
+            #{{ order.id }}
+
         </p>
 
     </div>
 
 
-    <!-- ============================= -->
-    <!-- BACK TO MENU -->
-    <!-- ============================= -->
+    <!-- =========================================================
+         BACK TO MENU
+    ========================================================== -->
 
     <a
         href="{% url 'home' %}"
@@ -208,141 +232,193 @@
 </div>
 
 
-<!-- ================================================= -->
-<!-- WHATSAPP JAVASCRIPT -->
-<!-- ================================================= -->
+<!-- =============================================================
+     WHATSAPP JAVASCRIPT
+============================================================== -->
 
 <script>
 
 (function () {
 
+    "use strict";
+
+
+    /* =========================================================
+       GET WHATSAPP BUTTON
+    ========================================================= */
+
     const btn = document.getElementById(
-        'nx-send-whatsapp-btn'
+        "nx-send-whatsapp-btn"
     );
 
-
-    // -----------------------------------------
-    // Check button exists
-    // -----------------------------------------
 
     if (!btn) {
         return;
     }
 
 
-    btn.addEventListener('click', function () {
+    /* =========================================================
+       BUTTON CLICK
+    ========================================================= */
+
+    btn.addEventListener("click", function () {
 
 
-        // -----------------------------------------
-        // Get customer data
-        // -----------------------------------------
+        /* =====================================================
+           GET DATA
+        ====================================================== */
 
         const phone =
-            btn.getAttribute('data-phone');
+            btn.getAttribute("data-phone");
 
 
         const orderId =
-            btn.getAttribute('data-order-id');
+            btn.getAttribute("data-order-id");
 
 
         const customerName =
-            btn.getAttribute('data-customer-name');
+            btn.getAttribute("data-customer-name");
 
 
-        // -----------------------------------------
-        // Check phone number
-        // -----------------------------------------
+        /* =====================================================
+           CHECK WHATSAPP NUMBER
+        ====================================================== */
 
         if (!phone) {
 
             alert(
-                'Customer phone number is missing.'
+                "The shop WhatsApp number is not configured."
             );
 
             return;
         }
 
 
-        // -----------------------------------------
-        // Clean phone number
-        // -----------------------------------------
+        /* =====================================================
+           CLEAN WHATSAPP NUMBER
+        ====================================================== */
 
         let whatsappPhone =
-            phone.replace(/\D/g, '');
+            phone.replace(/\D/g, "");
 
 
-        // -----------------------------------------
-        // Add India country code
-        // -----------------------------------------
+        /*
+         * If only a 10-digit Indian number is provided,
+         * automatically add India's country code.
+         */
 
         if (whatsappPhone.length === 10) {
 
             whatsappPhone =
-                '91' + whatsappPhone;
+                "91" + whatsappPhone;
 
         }
 
 
-        // -----------------------------------------
-        // Create WhatsApp message
-        // -----------------------------------------
+        /* =====================================================
+           CREATE ORDER MESSAGE
+        ====================================================== */
 
         let message =
-`Hello ${customerName} 👋
+`🥡 *NEW ORDER — THE CHINESE HUB*
 
-Thank you for ordering from The Chinese Hub! 🥡
+Hello The Chinese Hub 👋
 
-Your Order:
+I would like to place the following order.
+
+━━━━━━━━━━━━━━━━━━━━
+
+👤 Customer: ${customerName}
+📋 Order ID: #${orderId}
+📞 Phone: {{ order.phone_number }}
+
+━━━━━━━━━━━━━━━━━━━━
+
+🛒 *ORDER DETAILS*
 `;
 
 
-        // -----------------------------------------
-        // Add every ordered item
-        // -----------------------------------------
+        /* =====================================================
+           ADD ORDER ITEMS
+        ====================================================== */
 
         {% for item in order.items.all %}
 
         message +=
-`{{ forloop.counter }}. {{ item.item_name }}{% if item.get_size_display %} ({{ item.get_size_display }}){% endif %} x{{ item.quantity }} - ₹{{ item.subtotal }}
+`{{ forloop.counter }}. {{ item.item_name }}{% if item.get_size_display %} ({{ item.get_size_display }}){% endif %} ×{{ item.quantity }} — ₹{{ item.subtotal }}
 `;
 
         {% endfor %}
 
 
-        // -----------------------------------------
-        // Add bill totals
-        // -----------------------------------------
+        /* =====================================================
+           ORDER TYPE
+        ====================================================== */
 
         message +=
 `
+━━━━━━━━━━━━━━━━━━━━
+
+📦 Order Type:
+{{ order.get_order_type_display }}
+`;
+
+
+        /* =====================================================
+           DELIVERY ADDRESS
+        ====================================================== */
+
+        {% if order.order_type == "DELIVERY" %}
+
+        message +=
+`
+📍 Delivery Address:
+{{ order.address }}
+`;
+
+        {% endif %}
+
+
+        /* =====================================================
+           BILL TOTAL
+        ====================================================== */
+
+        message +=
+`
+━━━━━━━━━━━━━━━━━━━━
+
 💰 Items Subtotal: ₹{{ order.items_subtotal }}
 
-Service Charge: ₹{{ order.service_charge }}
+🧾 Service Charge: ₹{{ order.service_charge }}
 
-💵 Total Amount: ₹{{ order.total_amount }}
+💵 *TOTAL AMOUNT: ₹{{ order.total_amount }}*
 
-Thank you for choosing The Chinese Hub! ❤️`;
+━━━━━━━━━━━━━━━━━━━━
+
+Thank you for choosing
+*The Chinese Hub!* ❤️🥡
+`;
 
 
-        // -----------------------------------------
-        // WhatsApp URL
-        // -----------------------------------------
+        /* =====================================================
+           WHATSAPP URL
+        ====================================================== */
 
         const whatsappUrl =
-            'https://web.whatsapp.com/send' +
-            '?phone=' +
+            "https://wa.me/" +
             whatsappPhone +
-            '&text=' +
+            "?text=" +
             encodeURIComponent(message);
 
 
-        // -----------------------------------------
-        // Open WhatsApp
-        // -----------------------------------------
+        /* =====================================================
+           OPEN WHATSAPP
+        ====================================================== */
 
         window.open(
             whatsappUrl,
-            '_blank'
+            "_blank",
+            "noopener,noreferrer"
         );
 
     });
@@ -350,5 +426,6 @@ Thank you for choosing The Chinese Hub! ❤️`;
 })();
 
 </script>
+
 
 {% endblock %}

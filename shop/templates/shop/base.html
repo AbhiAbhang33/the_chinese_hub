@@ -1,39 +1,109 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-    <meta name="theme-color" content="#121212">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
 
-    <title>{% block title %}The Chinese Hub{% endblock %}</title>
+    <meta
+        name="theme-color"
+        content="#121212"
+    >
 
-    <!-- Google Fonts -->
+    <meta
+        name="description"
+        content="The Chinese Hub - Fresh Chinese food, fast ordering and delicious meals."
+    >
+
+    <title>
+        {% block title %}
+            The Chinese Hub
+        {% endblock %}
+    </title>
+
+
+    <!-- =========================================================
+         GOOGLE FONTS
+    ========================================================== -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
-    <!-- Django Static CSS -->
+
+    <!-- =========================================================
+         WEBSITE CSS
+         
+         Actual file:
+         static/shop/css/style.css
+    ========================================================== -->
+
     <link
         rel="stylesheet"
         href="{% static 'shop/css/style.css' %}"
     >
+
+
+    <!-- =========================================================
+         FAVICON
+         
+         If you have:
+         static/shop/img/logo.png
+    ========================================================== -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="{% static 'shop/img/logo.png' %}"
+    >
+
 </head>
 
-<body class="{% if cart_item_count > 0 and show_sticky_cart %}has-sticky-cart{% endif %}">
 
-    <!-- HEADER -->
+<body
+    class="{% if cart_item_count > 0 and show_sticky_cart %}has-sticky-cart{% endif %}"
+>
+
+
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
     <header class="nx-header">
+
         <div class="nx-container nx-header-inner">
 
-            <a href="{% url 'home' %}" class="nx-logo">
 
-                <!-- Django Static Logo -->
+            <!-- LOGO -->
+
+            <a
+                href="{% url 'home' %}"
+                class="nx-logo"
+                aria-label="The Chinese Hub Home"
+            >
+
+                <!--
+                    Actual image path:
+
+                    static/shop/img/logo.png
+                -->
+
                 <img
                     src="{% static 'shop/img/logo.png' %}"
                     alt="{{ shop_name }} logo"
@@ -46,12 +116,18 @@
 
             </a>
 
-            <!-- CART -->
+
+            <!-- =================================================
+                 CART
+            ================================================== -->
+
             <a
                 href="{% url 'view_cart' %}"
                 class="nx-cart-link"
                 aria-label="View cart"
             >
+
+                <!-- Cart Icon -->
 
                 <svg
                     width="22"
@@ -59,7 +135,9 @@
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
                 >
+
                     <path
                         d="M6 6h15l-1.5 9h-12L6 6Z"
                         stroke="currentColor"
@@ -87,22 +165,33 @@
                         r="1.5"
                         fill="currentColor"
                     />
+
                 </svg>
 
+
+                <!-- Cart Item Count -->
+
                 {% if cart_item_count > 0 %}
+
                     <span class="nx-cart-badge">
                         {{ cart_item_count }}
                     </span>
+
                 {% endif %}
 
             </a>
 
         </div>
+
     </header>
 
 
-    <!-- MESSAGES -->
+    <!-- =========================================================
+         DJANGO MESSAGES
+    ========================================================== -->
+
     {% if messages %}
+
         <div class="nx-container nx-messages">
 
             {% for message in messages %}
@@ -114,10 +203,14 @@
             {% endfor %}
 
         </div>
+
     {% endif %}
 
 
-    <!-- MAIN CONTENT -->
+    <!-- =========================================================
+         MAIN CONTENT
+    ========================================================== -->
+
     <main class="nx-container nx-main">
 
         {% block content %}
@@ -126,24 +219,38 @@
     </main>
 
 
-    <!-- FOOTER -->
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+
     <footer class="nx-footer">
 
         <div class="nx-container nx-footer-inner">
 
             <span>
-                &copy; {% now "Y" %}
+
+                &copy;
+                {% now "Y" %}
+
                 {{ shop_name }}
+
                 &mdash;
+
                 Fresh wok, fast order.
+
             </span>
+
 
             <span class="nx-footer-contact">
 
                 {{ owner_name }}
+
                 &middot;
 
-                <a href="tel:{{ owner_phone_tel }}">
+                <a
+                    href="tel:{{ owner_phone_tel }}"
+                    aria-label="Call {{ owner_name }}"
+                >
                     {{ owner_phone_display }}
                 </a>
 
@@ -154,7 +261,10 @@
     </footer>
 
 
-    <!-- CALL BUTTON -->
+    <!-- =========================================================
+         FLOATING CALL BUTTON
+    ========================================================== -->
+
     <a
         href="tel:{{ owner_phone_tel }}"
         class="nx-call-fab"
@@ -167,6 +277,7 @@
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
         >
 
             <path
@@ -181,21 +292,33 @@
     </a>
 
 
-    <!-- STICKY CART -->
+    <!-- =========================================================
+         STICKY CART
+    ========================================================== -->
+
     {% if cart_item_count > 0 and show_sticky_cart %}
 
         <a
             href="{% url 'view_cart' %}"
             class="nx-sticky-cart"
+            aria-label="View your shopping cart"
         >
+
+            <!-- Number of items -->
 
             <span class="nx-sticky-cart-dot">
                 {{ cart_item_count }}
             </span>
 
+
+            <!-- Cart label -->
+
             <span class="nx-sticky-cart-label">
                 View Cart
             </span>
+
+
+            <!-- Cart total -->
 
             <span class="nx-sticky-cart-total">
                 ₹{{ cart_total_price }}
@@ -205,5 +328,7 @@
 
     {% endif %}
 
+
 </body>
+
 </html>

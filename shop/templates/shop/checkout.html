@@ -1,47 +1,222 @@
-{% extends 'shop/base.html' %}
-{% block title %}Checkout — The Chinese Hub{% endblock %}
+{% extends "shop/base.html" %}
+
+
+{% block title %}
+    Checkout — The Chinese Hub
+{% endblock %}
+
 
 {% block content %}
-<h1 class="nx-page-title">Place Your Order</h1>
 
-<div class="nx-checkout-layout">
-    <form method="post" class="nx-form">
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="nx-form-field">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {% if field.errors %}
-                <p class="nx-form-error">{{ field.errors|striptags }}</p>
-            {% endif %}
-        </div>
-        {% endfor %}
+<!-- =========================================================
+     CHECKOUT PAGE
+========================================================== -->
 
-        <button type="submit" class="nx-btn nx-btn-primary nx-btn-lg">Confirm &amp; Place Order</button>
-    </form>
+<section class="nx-checkout-page">
 
-    <aside class="nx-order-summary">
-        <h2>Order Summary</h2>
-        <ul class="nx-summary-list">
-            {% for item in cart %}
-            <li>
-                <span>{{ item.name }} ({{ item.size|title }}) x{{ item.quantity }}</span>
-                <span>₹{{ item.subtotal }}</span>
-            </li>
+
+    <!-- =====================================================
+         PAGE TITLE
+    ====================================================== -->
+
+    <h1 class="nx-page-title">
+        Place Your Order
+    </h1>
+
+
+    <div class="nx-checkout-layout">
+
+
+        <!-- =================================================
+             CUSTOMER / ORDER FORM
+        ================================================== -->
+
+        <form
+            method="post"
+            class="nx-form"
+            novalidate
+        >
+
+            {% csrf_token %}
+
+
+            <!-- =================================================
+                 FORM FIELDS
+            ================================================== -->
+
+            {% for field in form %}
+
+                <div class="nx-form-field">
+
+
+                    <!-- FIELD LABEL -->
+
+                    <label
+                        for="{{ field.id_for_label }}"
+                    >
+                        {{ field.label }}
+                    </label>
+
+
+                    <!-- FIELD -->
+
+                    {{ field }}
+
+
+                    <!-- FIELD HELP TEXT -->
+
+                    {% if field.help_text %}
+
+                        <small class="nx-form-help">
+                            {{ field.help_text }}
+                        </small>
+
+                    {% endif %}
+
+
+                    <!-- FIELD ERROR -->
+
+                    {% if field.errors %}
+
+                        <p class="nx-form-error">
+                            {{ field.errors|striptags }}
+                        </p>
+
+                    {% endif %}
+
+
+                </div>
+
             {% endfor %}
-        </ul>
-        <div class="nx-summary-total nx-summary-line">
-            <span>Items subtotal</span>
-            <span>₹{{ cart.total_price }}</span>
-        </div>
-        <div class="nx-summary-total nx-summary-line">
-            <span>Service charge</span>
-            <span>₹{{ service_charge }}</span>
-        </div>
-        <div class="nx-summary-total">
-            <span>Total</span>
-            <span>₹{{ grand_total }}</span>
-        </div>
-    </aside>
-</div>
+
+
+            <!-- =================================================
+                 SUBMIT BUTTON
+            ================================================== -->
+
+            <button
+                type="submit"
+                class="nx-btn nx-btn-primary nx-btn-lg"
+            >
+                Confirm &amp; Place Order
+            </button>
+
+        </form>
+
+
+        <!-- =================================================
+             ORDER SUMMARY
+        ================================================== -->
+
+        <aside
+            class="nx-order-summary"
+            aria-label="Order summary"
+        >
+
+            <h2>
+                Order Summary
+            </h2>
+
+
+            <!-- =================================================
+                 CART ITEMS
+            ================================================== -->
+
+            <ul class="nx-summary-list">
+
+                {% for item in cart %}
+
+                    <li>
+
+                        <span>
+
+                            {{ item.name }}
+
+                            {% if item.size %}
+                                ({{ item.size|title }})
+                            {% endif %}
+
+                            ×{{ item.quantity }}
+
+                        </span>
+
+
+                        <span>
+                            ₹{{ item.subtotal }}
+                        </span>
+
+                    </li>
+
+                {% empty %}
+
+                    <li>
+
+                        <span>
+                            Your cart is empty.
+                        </span>
+
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+
+            <!-- =================================================
+                 ITEMS SUBTOTAL
+            ================================================== -->
+
+            <div class="nx-summary-total nx-summary-line">
+
+                <span>
+                    Items subtotal
+                </span>
+
+                <span>
+                    ₹{{ cart.total_price }}
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 SERVICE CHARGE
+            ================================================== -->
+
+            <div class="nx-summary-total nx-summary-line">
+
+                <span>
+                    Service charge
+                </span>
+
+                <span>
+                    ₹{{ service_charge }}
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 GRAND TOTAL
+            ================================================== -->
+
+            <div class="nx-summary-total">
+
+                <span>
+                    Total
+                </span>
+
+                <span>
+                    ₹{{ grand_total }}
+                </span>
+
+            </div>
+
+        </aside>
+
+
+    </div>
+
+</section>
+
 {% endblock %}

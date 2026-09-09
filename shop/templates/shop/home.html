@@ -1,117 +1,388 @@
-{% extends 'shop/base.html' %}
-{% load static%}
-{% block title %}Menu — The Chinese Hub{% endblock %}
+{% extends "shop/base.html" %}
+{% load static %}
+
+
+{% block title %}
+    Menu — The Chinese Hub
+{% endblock %}
+
 
 {% block content %}
+
+<!-- =========================================================
+     MENU HERO
+========================================================= -->
+
 <section class="food-menu-hero">
 
     <div class="food-menu-logo-area">
 
-        <!-- Half-circle text -->
-        <svg class="food-menu-curve" viewBox="0 0 500 280">
+        <!-- =================================================
+             HALF-CIRCLE TEXT
+        ================================================== -->
+
+        <svg
+            class="food-menu-curve"
+            viewBox="0 0 500 280"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+        >
+
             <defs>
+
                 <path
                     id="food-menu-text-curve"
                     d="M 90 210 A 160 160 0 0 1 410 210"
                 />
+
             </defs>
 
+
             <text class="food-menu-curve-text">
+
                 <textPath
                     href="#food-menu-text-curve"
                     startOffset="50%"
-                    text-anchor="middle">
+                    text-anchor="middle"
+                >
                     WORK-FRESH · MADE TO ORDER
                 </textPath>
+
             </text>
+
         </svg>
 
-        <!-- Logo -->
+
+        <!-- =================================================
+             LOGO
+
+             Actual path:
+
+             static/shop/img/logo.png
+        ================================================== -->
+
         <img
             src="{% static 'shop/img/logo.png' %}"
             alt="{{ shop_name }} logo"
             class="food-menu-logo"
+            loading="eager"
         >
 
     </div>
 
-    <h1 class="food-menu-title">Menu</h1>
+
+    <!-- MENU TITLE -->
+
+    <h1 class="food-menu-title">
+        Menu
+    </h1>
 
 </section>
 
+
+<!-- =========================================================
+     CATEGORY NAVIGATION
+========================================================= -->
+
 {% if categories %}
-<nav class="nx-tabs" aria-label="Jump to category">
+
+<nav
+    class="nx-tabs"
+    aria-label="Menu categories"
+>
+
     <div class="nx-tabs-inner">
+
         {% for category in categories %}
+
             {% if category.items.all %}
-            <a href="#cat-{{ category.id }}" class="nx-tab">{{ category.name }}</a>
+
+                <a
+                    href="#cat-{{ category.id }}"
+                    class="nx-tab"
+                >
+                    {{ category.name }}
+                </a>
+
             {% endif %}
+
         {% endfor %}
+
     </div>
+
 </nav>
+
 {% endif %}
 
+
+<!-- =========================================================
+     MENU CATEGORIES
+========================================================= -->
+
 {% for category in categories %}
+
     {% if category.items.all %}
-    <section class="nx-category" id="cat-{{ category.id }}">
-        <h2 class="nx-category-title">{{ category.name }}</h2>
-        <div class="nx-list">
-            {% for item in category.items.all %}
-            <div class="nx-row">
-                {% if item.image %}
-                <div class="nx-row-image" style="background-image:url('{{ item.image.url }}');"></div>
-                {% else %}
-                <div class="nx-row-image nx-row-image-placeholder">🥡</div>
-                {% endif %}
 
-                <div class="nx-row-body">
-                    <div class="nx-row-head">
-                        <span class="nx-veg-dot {% if not item.is_veg %}nx-veg-dot-nonveg{% endif %}"></span>
-                        <h3 class="nx-row-name">{{ item.name }}</h3>
-                    </div>
-                    {% if item.description %}
-                    <p class="nx-row-desc">{{ item.description }}</p>
-                    {% endif %}
+        <section
+            class="nx-category"
+            id="cat-{{ category.id }}"
+        >
 
-                    <form method="post" action="{% url 'add_to_cart' item.id %}" class="nx-add-form">
-                        {% csrf_token %}
-                        <input type="hidden" name="next" value="{{ request.path }}">
+            <!-- CATEGORY TITLE -->
 
-                        <div class="nx-row-controls">
-                            <div class="nx-size-row">
-                                {% if item.has_half_option %}
-                                <label class="nx-size-option">
-                                    <input type="radio" name="size" value="HALF" checked>
-                                    <span>Half · ₹{{ item.half_price }}</span>
-                                </label>
-                                <label class="nx-size-option">
-                                    <input type="radio" name="size" value="FULL">
-                                    <span>Full · ₹{{ item.full_price }}</span>
-                                </label>
-                                {% else %}
-                                <label class="nx-size-option">
-                                    <input type="radio" name="size" value="FULL" checked>
-                                    <span>₹{{ item.full_price }}</span>
-                                </label>
-                                {% endif %}
+            <h2 class="nx-category-title">
+                {{ category.name }}
+            </h2>
+
+
+            <!-- MENU ITEMS -->
+
+            <div class="nx-list">
+
+                {% for item in category.items.all %}
+
+                    <div class="nx-row">
+
+
+                        <!-- =================================================
+                             FOOD IMAGE
+                        ================================================== -->
+
+                        {% if item.image %}
+
+                            <div
+                                class="nx-row-image"
+                                style="background-image: url('{{ item.image.url }}');"
+                                role="img"
+                                aria-label="{{ item.name }}"
+                            ></div>
+
+                        {% else %}
+
+                            <div
+                                class="nx-row-image nx-row-image-placeholder"
+                                role="img"
+                                aria-label="Food placeholder"
+                            >
+                                🥡
                             </div>
 
-                            <div class="nx-qty-add">
-                                <input type="number" name="quantity" value="1" min="1" class="nx-qty-input" aria-label="Quantity">
-                                <button type="submit" class="nx-add-btn" aria-label="Add to cart">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-                                    Add
-                                </button>
+                        {% endif %}
+
+
+                        <!-- =================================================
+                             FOOD DETAILS
+                        ================================================== -->
+
+                        <div class="nx-row-body">
+
+
+                            <!-- FOOD NAME -->
+
+                            <div class="nx-row-head">
+
+                                <span
+                                    class="nx-veg-dot {% if not item.is_veg %}nx-veg-dot-nonveg{% endif %}"
+                                    aria-label="{% if item.is_veg %}Vegetarian{% else %}Non-vegetarian{% endif %}"
+                                ></span>
+
+
+                                <h3 class="nx-row-name">
+                                    {{ item.name }}
+                                </h3>
+
                             </div>
+
+
+                            <!-- FOOD DESCRIPTION -->
+
+                            {% if item.description %}
+
+                                <p class="nx-row-desc">
+                                    {{ item.description }}
+                                </p>
+
+                            {% endif %}
+
+
+                            <!-- =================================================
+                                 ADD TO CART FORM
+                            ================================================== -->
+
+                            <form
+                                method="post"
+                                action="{% url 'add_to_cart' item.id %}"
+                                class="nx-add-form"
+                            >
+
+                                {% csrf_token %}
+
+
+                                <!-- Return to current page -->
+
+                                <input
+                                    type="hidden"
+                                    name="next"
+                                    value="{{ request.path }}"
+                                >
+
+
+                                <div class="nx-row-controls">
+
+
+                                    <!-- =================================================
+                                         SIZE OPTIONS
+                                    ================================================== -->
+
+                                    <div class="nx-size-row">
+
+                                        {% if item.has_half_option %}
+
+                                            <!-- HALF -->
+
+                                            <label class="nx-size-option">
+
+                                                <input
+                                                    type="radio"
+                                                    name="size"
+                                                    value="HALF"
+                                                    checked
+                                                >
+
+                                                <span>
+                                                    Half · ₹{{ item.half_price }}
+                                                </span>
+
+                                            </label>
+
+
+                                            <!-- FULL -->
+
+                                            <label class="nx-size-option">
+
+                                                <input
+                                                    type="radio"
+                                                    name="size"
+                                                    value="FULL"
+                                                >
+
+                                                <span>
+                                                    Full · ₹{{ item.full_price }}
+                                                </span>
+
+                                            </label>
+
+                                        {% else %}
+
+                                            <!-- FULL ONLY -->
+
+                                            <label class="nx-size-option">
+
+                                                <input
+                                                    type="radio"
+                                                    name="size"
+                                                    value="FULL"
+                                                    checked
+                                                >
+
+                                                <span>
+                                                    ₹{{ item.full_price }}
+                                                </span>
+
+                                            </label>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <!-- =================================================
+                                         QUANTITY + ADD BUTTON
+                                    ================================================== -->
+
+                                    <div class="nx-qty-add">
+
+
+                                        <!-- QUANTITY -->
+
+                                        <input
+                                            type="number"
+                                            name="quantity"
+                                            value="1"
+                                            min="1"
+                                            step="1"
+                                            class="nx-qty-input"
+                                            aria-label="Quantity for {{ item.name }}"
+                                        >
+
+
+                                        <!-- ADD BUTTON -->
+
+                                        <button
+                                            type="submit"
+                                            class="nx-add-btn"
+                                            aria-label="Add {{ item.name }} to cart"
+                                        >
+
+                                            <svg
+                                                width="16"
+                                                height="16"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                aria-hidden="true"
+                                            >
+
+                                                <path
+                                                    d="M12 5v14M5 12h14"
+                                                    stroke="currentColor"
+                                                    stroke-width="2.5"
+                                                    stroke-linecap="round"
+                                                />
+
+                                            </svg>
+
+                                            <span>
+                                                Add
+                                            </span>
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+
                         </div>
-                    </form>
-                </div>
+
+                    </div>
+
+                {% endfor %}
+
             </div>
-            {% endfor %}
-        </div>
-    </section>
+
+        </section>
+
     {% endif %}
+
+
 {% empty %}
-    <p>No menu items yet. Add some from the Django admin panel.</p>
+
+    <!-- =========================================================
+         EMPTY MENU
+    ========================================================== -->
+
+    <div class="nx-container">
+
+        <p class="nx-empty-message">
+            No menu items yet.
+            Add some from the Django admin panel.
+        </p>
+
+    </div>
+
 {% endfor %}
+
+
 {% endblock %}

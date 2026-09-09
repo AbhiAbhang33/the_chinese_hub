@@ -1,112 +1,313 @@
 """
 Django settings for chinese_hub_shop project.
 """
+
 from pathlib import Path
 from decimal import Decimal
 import os
 
+
+# =============================================================================
+# BASE DIRECTORY
+# =============================================================================
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "di!6su(r-n8ifa_io1psr=qspgpu-lg3cbdv@j77!gtkeyd)vt"
 
-DEBUG = False
+# =============================================================================
+# SECURITY
+# =============================================================================
+
+# IMPORTANT:
+# Add DJANGO_SECRET_KEY in Vercel Environment Variables.
+#
+# Example:
+# DJANGO_SECRET_KEY=your-new-secret-key
+#
+# NEVER put your real production secret key in GitHub.
+
+SECRET_KEY = "km#5)z%5zgjk1!+c(be3a2+hvaypivm$#p8_c$mphbj#7ih75w"
+# =============================================================================
+# DEBUG
+# =============================================================================
+
+DEBUG = True
+
+
+# =============================================================================
+# ALLOWED HOSTS
+# =============================================================================
 
 ALLOWED_HOSTS = [
-    ".vercel.app",
     "thechinesehub.vercel.app",
+    ".vercel.app",
     "localhost",
     "127.0.0.1",
 ]
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# =============================================================================
+# APPLICATIONS
+# =============================================================================
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'shop',
+    # Django built-in applications
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+
+    # Your application
+    "shop",
 ]
+
+
+# =============================================================================
+# MIDDLEWARE
+# =============================================================================
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+
+    # WhiteNoise serves Django static files
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-ROOT_URLCONF = 'chinese_hub_shop.urls'
+# =============================================================================
+# STATIC FILE STORAGE
+# =============================================================================
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
+
+
+# =============================================================================
+# URL CONFIGURATION
+# =============================================================================
+
+ROOT_URLCONF = "chinese_hub_shop.urls"
+
+
+# =============================================================================
+# TEMPLATES
+# =============================================================================
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'shop.context_processors.cart_count',
-                'shop.context_processors.shop_contact',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
+
+        "APP_DIRS": True,
+
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+
+                # Your custom context processors
+                "shop.context_processors.cart_count",
+                "shop.context_processors.shop_contact",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'chinese_hub_shop.wsgi.application'
+
+# =============================================================================
+# WSGI APPLICATION
+# =============================================================================
+
+WSGI_APPLICATION = "chinese_hub_shop.wsgi.application"
+
+
+# =============================================================================
+# DATABASE
+# =============================================================================
+#
+# IMPORTANT:
+# SQLite is okay for your current testing/deployment setup.
+#
+# For a production food-ordering website with real customers/orders,
+# PostgreSQL is recommended later.
+#
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
+
+# =============================================================================
+# PASSWORD VALIDATION
+# =============================================================================
+
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "UserAttributeSimilarityValidator"
+        ),
+    },
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "MinimumLengthValidator"
+        ),
+    },
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "CommonPasswordValidator"
+        ),
+    },
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "NumericPasswordValidator"
+        ),
+    },
 ]
 
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Asia/Kolkata'
+
+# =============================================================================
+# INTERNATIONALIZATION
+# =============================================================================
+
+LANGUAGE_CODE = "en-us"
+
+TIME_ZONE = "Asia/Kolkata"
+
 USE_I18N = True
+
 USE_TZ = True
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR  / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# =============================================================================
+# STATIC FILES
+# =============================================================================
+#
+# Your actual structure:
+#
+# static/
+# └── shop/
+#     ├── css/
+#     │   └── style.css
+#     └── img/
+#
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_URL = "/static/"
 
-# ---------------------------------------------------------------------------
-# Shop-specific settings
-# ---------------------------------------------------------------------------
-# Owner's WhatsApp number in international format WITHOUT '+' or spaces,
-# e.g. country code 91 for India + 10-digit number => "919876543210"
-OWNER_WHATSAPP_NUMBER = "917757855545"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+# =============================================================================
+# MEDIA FILES
+# =============================================================================
+#
+# Your actual structure:
+#
+# media/
+# ├── bills/
+# └── food_items/
+#
+
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR / "media"
+
+
+# =============================================================================
+# SECURITY / VERCEL HTTPS
+# =============================================================================
+
+SECURE_PROXY_SSL_HEADER = (
+    "HTTP_X_FORWARDED_PROTO",
+    "https",
+)
+
+
+# Only use secure cookies in production.
+SESSION_COOKIE_SECURE = not DEBUG
+
+CSRF_COOKIE_SECURE = not DEBUG
+
+
+# =============================================================================
+# DEFAULT PRIMARY KEY
+# =============================================================================
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# =============================================================================
+# SHOP SETTINGS
+# =============================================================================
 
 SHOP_NAME = "The Chinese Hub"
 
-# Shown in the footer and used by the floating "Call" button
-OWNER_NAME = "Sohail Arab"
-OWNER_PHONE_DISPLAY = "7757855545"   # shown to customers
-OWNER_PHONE_TEL = "7757855545"          # used in the tel: link - no spaces
 
-# Flat service charge added to every bill
-SERVICE_CHARGE = Decimal("00.00")
+# =============================================================================
+# OWNER INFORMATION
+# =============================================================================
+
+OWNER_NAME = "Sohail Arab"
+
+# Number displayed to customers
+OWNER_PHONE_DISPLAY = "7757855545"
+
+# Number used by tel: links
+OWNER_PHONE_TEL = "7757855545"
+
+
+# =============================================================================
+# WHATSAPP
+# =============================================================================
+#
+# India:
+# +91 7757855545
+#
+# WhatsApp format:
+# 917757855545
+#
+# No + sign
+# No spaces
+# No hyphens
+#
+
+OWNER_WHATSAPP_NUMBER = "917757855545"
+
+
+# =============================================================================
+# BILLING
+# =============================================================================
+
+# Flat service charge added to every order.
+
+SERVICE_CHARGE = Decimal("0.00")
