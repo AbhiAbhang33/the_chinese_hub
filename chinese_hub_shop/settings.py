@@ -14,23 +14,29 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# =========================================================
+# =============================================================================
 # SECURITY
-# =========================================================
+# =============================================================================
 
-SECRET_KEY = "jnv2ee%h)guemm@gtjk_gz#9x73=v4sjbu6ntkzf=x#6)jy-wh"
+# IMPORTANT:
+# Set DJANGO_SECRET_KEY in Vercel Environment Variables.
+SECRET_KEY = "527tk!pm_s%zms7d+!n&5(2s276czp11=d+visin5hb7un9e3s"
 
 
-# =========================================================
+# =============================================================================
 # DEBUG
-# =========================================================
+# =============================================================================
 
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
+# Temporary debugging option for Vercel.
+# After deployment is working, you can remove this or set it to False.
 DEBUG_PROPAGATE_EXCEPTIONS = True
-# =========================================================
-# HOSTS
-# =========================================================
+
+
+# =============================================================================
+# ALLOWED HOSTS
+# =============================================================================
 
 ALLOWED_HOSTS = [
     "thechinesehub.vercel.app",
@@ -40,16 +46,21 @@ ALLOWED_HOSTS = [
 ]
 
 
+# =============================================================================
+# CSRF
+# =============================================================================
+
 CSRF_TRUSTED_ORIGINS = [
     "https://thechinesehub.vercel.app",
     "https://*.vercel.app",
 ]
+
+
 # =============================================================================
 # APPLICATIONS
 # =============================================================================
 
 INSTALLED_APPS = [
-    # Django built-in applications
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -69,7 +80,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
 
-    # WhiteNoise serves Django static files
+    # Static files
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -79,21 +90,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
-
-# =============================================================================
-# STATIC FILE STORAGE
-# =============================================================================
-
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
-    },
-}
 
 
 # =============================================================================
@@ -134,7 +130,7 @@ TEMPLATES = [
 
 
 # =============================================================================
-# WSGI APPLICATION
+# WSGI
 # =============================================================================
 
 WSGI_APPLICATION = "chinese_hub_shop.wsgi.application"
@@ -143,13 +139,6 @@ WSGI_APPLICATION = "chinese_hub_shop.wsgi.application"
 # =============================================================================
 # DATABASE
 # =============================================================================
-#
-# IMPORTANT:
-# SQLite is okay for your current testing/deployment setup.
-#
-# For a production food-ordering website with real customers/orders,
-# PostgreSQL is recommended later.
-#
 
 DATABASES = {
     "default": {
@@ -207,15 +196,6 @@ USE_TZ = True
 # =============================================================================
 # STATIC FILES
 # =============================================================================
-#
-# Your actual structure:
-#
-# static/
-# └── shop/
-#     ├── css/
-#     │   └── style.css
-#     └── img/
-#
 
 STATIC_URL = "/static/"
 
@@ -229,13 +209,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # =============================================================================
 # MEDIA FILES
 # =============================================================================
-#
-# Your actual structure:
-#
-# media/
-# ├── bills/
-# └── food_items/
-#
 
 MEDIA_URL = "/media/"
 
@@ -243,7 +216,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 
 # =============================================================================
-# SECURITY / VERCEL HTTPS
+# VERCEL / HTTPS
 # =============================================================================
 
 SECURE_PROXY_SSL_HEADER = (
@@ -251,8 +224,6 @@ SECURE_PROXY_SSL_HEADER = (
     "https",
 )
 
-
-# Only use secure cookies in production.
 SESSION_COOKIE_SECURE = not DEBUG
 
 CSRF_COOKIE_SECURE = not DEBUG
@@ -278,27 +249,18 @@ SHOP_NAME = "The Chinese Hub"
 
 OWNER_NAME = "Sohail Arab"
 
-# Number displayed to customers
 OWNER_PHONE_DISPLAY = "7757855545"
 
-# Number used by tel: links
 OWNER_PHONE_TEL = "7757855545"
 
 
 # =============================================================================
 # WHATSAPP
 # =============================================================================
-#
-# India:
-# +91 7757855545
-#
-# WhatsApp format:
-# 917757855545
-#
-# No + sign
-# No spaces
-# No hyphens
-#
+
+# WhatsApp number:
+# Country code +91 + number
+# No +, spaces, or hyphens
 
 OWNER_WHATSAPP_NUMBER = "917757855545"
 
@@ -306,7 +268,5 @@ OWNER_WHATSAPP_NUMBER = "917757855545"
 # =============================================================================
 # BILLING
 # =============================================================================
-
-# Flat service charge added to every order.
 
 SERVICE_CHARGE = Decimal("0.00")
