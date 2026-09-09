@@ -1,0 +1,47 @@
+{% extends 'shop/base.html' %}
+{% block title %}Checkout — The Chinese Hub{% endblock %}
+
+{% block content %}
+<h1 class="nx-page-title">Place Your Order</h1>
+
+<div class="nx-checkout-layout">
+    <form method="post" class="nx-form">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="nx-form-field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <p class="nx-form-error">{{ field.errors|striptags }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="nx-btn nx-btn-primary nx-btn-lg">Confirm &amp; Place Order</button>
+    </form>
+
+    <aside class="nx-order-summary">
+        <h2>Order Summary</h2>
+        <ul class="nx-summary-list">
+            {% for item in cart %}
+            <li>
+                <span>{{ item.name }} ({{ item.size|title }}) x{{ item.quantity }}</span>
+                <span>₹{{ item.subtotal }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="nx-summary-total nx-summary-line">
+            <span>Items subtotal</span>
+            <span>₹{{ cart.total_price }}</span>
+        </div>
+        <div class="nx-summary-total nx-summary-line">
+            <span>Service charge</span>
+            <span>₹{{ service_charge }}</span>
+        </div>
+        <div class="nx-summary-total">
+            <span>Total</span>
+            <span>₹{{ grand_total }}</span>
+        </div>
+    </aside>
+</div>
+{% endblock %}

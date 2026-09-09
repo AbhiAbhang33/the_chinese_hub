@@ -1,0 +1,54 @@
+{% extends 'shop/base.html' %}
+{% block title %}Your Cart — The Chinese Hub{% endblock %}
+
+{% block content %}
+<h1 class="nx-page-title">Your Cart</h1>
+
+{% if cart.is_empty %}
+    <div class="nx-empty-state">
+        <div class="nx-empty-icon">🥡</div>
+        <p class="nx-empty">Your cart is empty.</p>
+        <a href="{% url 'home' %}" class="nx-btn nx-btn-primary">Browse the menu</a>
+    </div>
+{% else %}
+    <div class="nx-cart-list">
+        {% for item in cart %}
+        <div class="nx-cart-row">
+            <div class="nx-cart-row-top">
+                <div class="nx-cart-row-info">
+                    <span class="nx-cart-row-name">{{ item.name }}</span>
+                    <span class="nx-cart-row-size">{{ item.size|title }}</span>
+                </div>
+                <span class="nx-cart-row-price">₹{{ item.subtotal }}</span>
+            </div>
+            <div class="nx-cart-row-bottom">
+                <form method="post" action="{% url 'update_cart_item' item.key %}" class="nx-cart-row-qty">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="nx-qty-input" aria-label="Quantity">
+                    <button type="submit" class="nx-btn nx-btn-sm">Update</button>
+                </form>
+                <a href="{% url 'remove_from_cart' item.key %}" class="nx-remove-link">Remove</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="nx-bill-breakdown">
+        <div class="nx-bill-line">
+            <span>Items subtotal</span>
+            <span>₹{{ cart.total_price }}</span>
+        </div>
+        <div class="nx-bill-line">
+            <span>Service charge</span>
+            <span>₹{{ service_charge }}</span>
+        </div>
+    </div>
+
+    <div class="nx-cart-total">
+        <span>Total</span>
+        <span>₹{{ grand_total }}</span>
+    </div>
+
+    <a href="{% url 'checkout' %}" class="nx-btn nx-btn-primary nx-btn-lg">Proceed to Place Order</a>
+{% endif %}
+{% endblock %}

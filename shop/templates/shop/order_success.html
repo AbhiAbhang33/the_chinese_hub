@@ -1,0 +1,354 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Order Placed — The Chinese Hub{% endblock %}
+
+{% block content %}
+
+<div class="nx-success">
+
+    <!-- ============================= -->
+    <!-- SUCCESS ICON -->
+    <!-- ============================= -->
+
+    <div class="nx-success-icon">
+        ✓
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- PAGE TITLE -->
+    <!-- ============================= -->
+
+    <h1 class="nx-page-title">
+        To Place Order!
+    </h1>
+
+
+    <p>
+        Thanks, {{ order.customer_name }}!
+        To Place The Order Send It To the Whatsup.
+    </p>
+
+
+    <!-- ============================= -->
+    <!-- WHATSAPP BUTTON -->
+    <!-- ============================= -->
+
+    <div class="nx-success-actions">
+
+        <button
+            type="button"
+            id="nx-send-whatsapp-btn"
+            class="nx-btn nx-btn-whatsapp nx-btn-lg"
+
+            data-phone="{{ order.phone_number }}"
+            data-order-id="{{ order.id }}"
+            data-customer-name="{{ order.customer_name }}"
+        >
+            💬 Send Order via WhatsApp
+        </button>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- BILL / ORDER SUMMARY -->
+    <!-- ============================= -->
+
+    <div class="nx-bill">
+
+        <h2>
+            Your Order
+        </h2>
+
+
+        <!-- ============================= -->
+        <!-- ORDER ITEMS -->
+        <!-- ============================= -->
+
+        <ul class="nx-summary-list">
+
+            {% for item in order.items.all %}
+
+            <li>
+
+                <span>
+
+                    {{ item.item_name }}
+
+                    {% if item.get_size_display %}
+                        ({{ item.get_size_display }})
+                    {% endif %}
+
+                    x{{ item.quantity }}
+
+                </span>
+
+
+                <span>
+                    ₹{{ item.subtotal }}
+                </span>
+
+            </li>
+
+            {% empty %}
+
+            <li>
+                <span>
+                    No items found.
+                </span>
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+
+        <!-- ============================= -->
+        <!-- ITEMS SUBTOTAL -->
+        <!-- ============================= -->
+
+        <div class="nx-summary-total nx-summary-line">
+
+            <span>
+                Items subtotal
+            </span>
+
+            <span>
+                ₹{{ order.items_subtotal }}
+            </span>
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- SERVICE CHARGE -->
+        <!-- ============================= -->
+
+        <div class="nx-summary-total nx-summary-line">
+
+            <span>
+                Service charge
+            </span>
+
+            <span>
+                ₹{{ order.service_charge }}
+            </span>
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- TOTAL -->
+        <!-- ============================= -->
+
+        <div class="nx-summary-total">
+
+            <span>
+                Total
+            </span>
+
+            <span>
+                ₹{{ order.total_amount }}
+            </span>
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- ORDER INFORMATION -->
+        <!-- ============================= -->
+
+        <p class="nx-bill-meta">
+
+            <strong>
+                Order Type:
+            </strong>
+
+            {{ order.get_order_type_display }}
+
+
+            {% if order.order_type == 'DELIVERY' %}
+
+                <br>
+
+                <strong>
+                    Delivery Address:
+                </strong>
+
+                {{ order.address }}
+
+            {% endif %}
+
+
+            <br>
+
+            <strong>
+                Phone:
+            </strong>
+
+            {{ order.phone_number }}
+
+        </p>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- BACK TO MENU -->
+    <!-- ============================= -->
+
+    <a
+        href="{% url 'home' %}"
+        class="nx-btn"
+    >
+        Back to Menu
+    </a>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- WHATSAPP JAVASCRIPT -->
+<!-- ================================================= -->
+
+<script>
+
+(function () {
+
+    const btn = document.getElementById(
+        'nx-send-whatsapp-btn'
+    );
+
+
+    // -----------------------------------------
+    // Check button exists
+    // -----------------------------------------
+
+    if (!btn) {
+        return;
+    }
+
+
+    btn.addEventListener('click', function () {
+
+
+        // -----------------------------------------
+        // Get customer data
+        // -----------------------------------------
+
+        const phone =
+            btn.getAttribute('data-phone');
+
+
+        const orderId =
+            btn.getAttribute('data-order-id');
+
+
+        const customerName =
+            btn.getAttribute('data-customer-name');
+
+
+        // -----------------------------------------
+        // Check phone number
+        // -----------------------------------------
+
+        if (!phone) {
+
+            alert(
+                'Customer phone number is missing.'
+            );
+
+            return;
+        }
+
+
+        // -----------------------------------------
+        // Clean phone number
+        // -----------------------------------------
+
+        let whatsappPhone =
+            phone.replace(/\D/g, '');
+
+
+        // -----------------------------------------
+        // Add India country code
+        // -----------------------------------------
+
+        if (whatsappPhone.length === 10) {
+
+            whatsappPhone =
+                '91' + whatsappPhone;
+
+        }
+
+
+        // -----------------------------------------
+        // Create WhatsApp message
+        // -----------------------------------------
+
+        let message =
+`Hello ${customerName} 👋
+
+Thank you for ordering from The Chinese Hub! 🥡
+
+Your Order:
+`;
+
+
+        // -----------------------------------------
+        // Add every ordered item
+        // -----------------------------------------
+
+        {% for item in order.items.all %}
+
+        message +=
+`{{ forloop.counter }}. {{ item.item_name }}{% if item.get_size_display %} ({{ item.get_size_display }}){% endif %} x{{ item.quantity }} - ₹{{ item.subtotal }}
+`;
+
+        {% endfor %}
+
+
+        // -----------------------------------------
+        // Add bill totals
+        // -----------------------------------------
+
+        message +=
+`
+💰 Items Subtotal: ₹{{ order.items_subtotal }}
+
+Service Charge: ₹{{ order.service_charge }}
+
+💵 Total Amount: ₹{{ order.total_amount }}
+
+Thank you for choosing The Chinese Hub! ❤️`;
+
+
+        // -----------------------------------------
+        // WhatsApp URL
+        // -----------------------------------------
+
+        const whatsappUrl =
+            'https://web.whatsapp.com/send' +
+            '?phone=' +
+            whatsappPhone +
+            '&text=' +
+            encodeURIComponent(message);
+
+
+        // -----------------------------------------
+        // Open WhatsApp
+        // -----------------------------------------
+
+        window.open(
+            whatsappUrl,
+            '_blank'
+        );
+
+    });
+
+})();
+
+</script>
+
+{% endblock %}
