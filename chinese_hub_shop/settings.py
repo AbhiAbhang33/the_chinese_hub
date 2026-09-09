@@ -20,22 +20,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "jnv2ee%h)guemm@gtjk_gz#9x73=v4sjbu6ntkzf=x#6)jy-wh"
 
-if not SECRET_KEY:
-    if os.environ.get("DEBUG", "False").lower() == "true":
-        SECRET_KEY = "django-insecure-local-development-key"
-    else:
-        raise RuntimeError(
-            "DJANGO_SECRET_KEY environment variable is not set."
-        )
-
 
 # =========================================================
 # DEBUG
 # =========================================================
 
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-
+DEBUG_PROPAGATE_EXCEPTIONS = True
 # =========================================================
 # HOSTS
 # =========================================================

@@ -1,6 +1,5 @@
 import os
 import sys
-import traceback
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -14,14 +13,4 @@ os.environ.setdefault(
 
 from django.core.wsgi import get_wsgi_application
 
-django_app = get_wsgi_application()
-
-
-def app(environ, start_response):
-    try:
-        return django_app(environ, start_response)
-    except Exception:
-        print("\n========== DJANGO ERROR ==========")
-        traceback.print_exc()
-        print("========== END DJANGO ERROR ==========\n")
-        raise
+app = get_wsgi_application()
