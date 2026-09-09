@@ -14,29 +14,31 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# =============================================================================
+# =========================================================
 # SECURITY
-# =============================================================================
+# =========================================================
 
-# IMPORTANT:
-# Add DJANGO_SECRET_KEY in Vercel Environment Variables.
-#
-# Example:
-# DJANGO_SECRET_KEY=your-new-secret-key
-#
-# NEVER put your real production secret key in GitHub.
+SECRET_KEY = "jnv2ee%h)guemm@gtjk_gz#9x73=v4sjbu6ntkzf=x#6)jy-wh"
 
-SECRET_KEY = "km#5)z%5zgjk1!+c(be3a2+hvaypivm$#p8_c$mphbj#7ih75w"
-# =============================================================================
+if not SECRET_KEY:
+    if os.environ.get("DEBUG", "False").lower() == "true":
+        SECRET_KEY = "django-insecure-local-development-key"
+    else:
+        raise RuntimeError(
+            "DJANGO_SECRET_KEY environment variable is not set."
+        )
+
+
+# =========================================================
 # DEBUG
-# =============================================================================
+# =========================================================
 
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 
-# =============================================================================
-# ALLOWED HOSTS
-# =============================================================================
+# =========================================================
+# HOSTS
+# =========================================================
 
 ALLOWED_HOSTS = [
     "thechinesehub.vercel.app",
@@ -45,6 +47,11 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
 ]
 
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://thechinesehub.vercel.app",
+    "https://*.vercel.app",
+]
 # =============================================================================
 # APPLICATIONS
 # =============================================================================
