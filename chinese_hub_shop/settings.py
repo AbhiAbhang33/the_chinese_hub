@@ -101,4 +101,4 @@ OWNER_PHONE_DISPLAY = "7757855545"   # shown to customers
 OWNER_PHONE_TEL = "7757855545"          # used in the tel: link - no spaces
 
 # Flat service charge added to every bill
-SERVICE_CHARGE = Decimal("40.00")
+SERVICE_CHARGE = Decimal("00.00")
