@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-secret-key')
 # DEBUG
 # =============================================================================
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app', 'now.sh', '127.0.0.1', 'localhost']
 
@@ -36,6 +36,7 @@ ALLOWED_HOSTS = ['.vercel.app', 'now.sh', '127.0.0.1', 'localhost']
 # =============================================================================
 
 INSTALLED_APPS = [
+    "whitenoise.runserver_nostatic"
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
