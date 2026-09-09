@@ -2,7 +2,7 @@
   "version": 2,
   "functions": {
     "chinese_hub_shop/wsgi.py": {
-      "runtime": "@vercel/python"
+      "maxDuration": 60
     }
   },
   "routes": [
