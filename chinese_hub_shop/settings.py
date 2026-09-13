@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-secret-key')
 # DEBUG
 # =============================================================================
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['.vercel.app', 'now.sh', '127.0.0.1', 'localhost']
 
@@ -253,7 +253,7 @@ OWNER_PHONE_TEL = "7757855545"
 # Country code +91 + number
 # No +, spaces, or hyphens
 
-OWNER_WHATSAPP_NUMBER = "7757855545"
+OWNER_WHATSAPP_NUMBER = "+917757855545"
 
 
 # =============================================================================
