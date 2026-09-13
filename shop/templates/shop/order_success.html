@@ -36,6 +36,7 @@
         Thank you, {{ order.customer_name }}! ❤️
     </p>
 
+
     <p>
         Your order has been prepared.
         Send the order details to The Chinese Hub on WhatsApp
@@ -53,9 +54,14 @@
             type="button"
             id="nx-send-whatsapp-btn"
             class="nx-btn nx-btn-whatsapp nx-btn-lg"
+
             data-phone="{{ OWNER_WHATSAPP_NUMBER }}"
+
             data-order-id="{{ order.id }}"
+
             data-customer-name="{{ order.customer_name }}"
+
+            data-customer-phone="{{ order.phone_number }}"
         >
             💬 Send Order via WhatsApp
         </button>
@@ -261,65 +267,100 @@
        BUTTON CLICK
     ========================================================= */
 
-    btn.addEventListener("click", function () {
+    btn.addEventListener(
+        "click",
+        function () {
 
 
-        /* =====================================================
-           GET DATA
-        ====================================================== */
+            /* =====================================================
+               GET DATA
+            ====================================================== */
 
-        const phone =
-            btn.getAttribute("data-phone");
-
-
-        const orderId =
-            btn.getAttribute("data-order-id");
+            const phone =
+                btn.getAttribute(
+                    "data-phone"
+                );
 
 
-        const customerName =
-            btn.getAttribute("data-customer-name");
+            const orderId =
+                btn.getAttribute(
+                    "data-order-id"
+                );
 
 
-        /* =====================================================
-           CHECK WHATSAPP NUMBER
-        ====================================================== */
-
-        if (!phone) {
-
-            alert(
-                "The shop WhatsApp number is not configured."
-            );
-
-            return;
-        }
+            const customerName =
+                btn.getAttribute(
+                    "data-customer-name"
+                );
 
 
-        /* =====================================================
-           CLEAN WHATSAPP NUMBER
-        ====================================================== */
-
-        let whatsappPhone =
-            phone.replace(/\D/g, "");
+            const customerPhone =
+                btn.getAttribute(
+                    "data-customer-phone"
+                );
 
 
-        /*
-         * If only a 10-digit Indian number is provided,
-         * automatically add India's country code.
-         */
+            /* =====================================================
+               CHECK WHATSAPP NUMBER
+            ====================================================== */
 
-        if (whatsappPhone.length === 10) {
+            if (!phone) {
 
-            whatsappPhone =
-                "+91" + whatsappPhone;
+                alert(
+                    "The shop WhatsApp number is not configured."
+                );
 
-        }
+                return;
+            }
 
 
-        /* =====================================================
-           CREATE ORDER MESSAGE
-        ====================================================== */
+            /* =====================================================
+               CLEAN WHATSAPP NUMBER
+            ====================================================== */
 
-        let message =
+            let whatsappPhone =
+                phone.replace(
+                    /\D/g,
+                    ""
+                );
+
+
+            /*
+             * Indian 10-digit number
+             */
+
+            if (
+                whatsappPhone.length === 10
+            ) {
+
+                whatsappPhone =
+                    "91" +
+                    whatsappPhone;
+
+            }
+
+
+            /* =====================================================
+               VALIDATE PHONE NUMBER
+            ====================================================== */
+
+            if (
+                whatsappPhone.length < 10
+            ) {
+
+                alert(
+                    "Invalid shop WhatsApp number."
+                );
+
+                return;
+            }
+
+
+            /* =====================================================
+               CREATE ORDER MESSAGE
+            ====================================================== */
+
+            let message =
 `🥡 *NEW ORDER — THE CHINESE HUB*
 
 Hello The Chinese Hub 👋
@@ -330,7 +371,7 @@ I would like to place the following order.
 
 👤 Customer: ${customerName}
 📋 Order ID: #${orderId}
-📞 Phone: {{ order.phone_number }}
+📞 Phone: ${customerPhone}
 
 ━━━━━━━━━━━━━━━━━━━━
 
@@ -338,52 +379,52 @@ I would like to place the following order.
 `;
 
 
-        /* =====================================================
-           ADD ORDER ITEMS
-        ====================================================== */
+            /* =====================================================
+               ADD ORDER ITEMS
+            ====================================================== */
 
-        {% for item in order.items.all %}
+            {% for item in order.items.all %}
 
-        message +=
+            message +=
 `{{ forloop.counter }}. {{ item.item_name }}{% if item.get_size_display %} ({{ item.get_size_display }}){% endif %} ×{{ item.quantity }} — ₹{{ item.subtotal }}
 `;
 
-        {% endfor %}
+            {% endfor %}
 
 
-        /* =====================================================
-           ORDER TYPE
-        ====================================================== */
+            /* =====================================================
+               ORDER TYPE
+            ====================================================== */
 
-        message +=
+            message +=
 `
 ━━━━━━━━━━━━━━━━━━━━
 
-📦 Order Type:
+📦 *Order Type:*
 {{ order.get_order_type_display }}
 `;
 
 
-        /* =====================================================
-           DELIVERY ADDRESS
-        ====================================================== */
+            /* =====================================================
+               DELIVERY ADDRESS
+            ====================================================== */
 
-        {% if order.order_type == "DELIVERY" %}
+            {% if order.order_type == "DELIVERY" %}
 
-        message +=
+            message +=
 `
-📍 Delivery Address:
+📍 *Delivery Address:*
 {{ order.address }}
 `;
 
-        {% endif %}
+            {% endif %}
 
 
-        /* =====================================================
-           BILL TOTAL
-        ====================================================== */
+            /* =====================================================
+               BILL TOTAL
+            ====================================================== */
 
-        message +=
+            message +=
 `
 ━━━━━━━━━━━━━━━━━━━━
 
@@ -400,33 +441,34 @@ Thank you for choosing
 `;
 
 
-        /* =====================================================
-           WHATSAPP URL
-        ====================================================== */
-        const whatsappPhone = "+917757855545";
+            /* =====================================================
+               CREATE WHATSAPP URL
+            ====================================================== */
 
-        const whatsappUrl =
-            "https://wa.me/" +
-            whatsappPhone +
-            "?text=" +
-            encodeURIComponent(message);
+            const whatsappUrl =
+                "https://wa.me/" +
+                whatsappPhone +
+                "?text=" +
+                encodeURIComponent(
+                    message
+                );
 
 
-        /* =====================================================
-           OPEN WHATSAPP
-        ====================================================== */
+            /* =====================================================
+               OPEN WHATSAPP
+            ====================================================== */
 
-        window.open(
-            whatsappUrl,
-            "_blank",
-            "noopener,noreferrer"
-        );
+            window.open(
+                whatsappUrl,
+                "_blank",
+                "noopener,noreferrer"
+            );
 
-    });
+        }
+    );
 
 })();
 
 </script>
-
 
 {% endblock %}
